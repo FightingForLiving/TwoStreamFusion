@@ -274,7 +274,7 @@ class vgg16(object):
         fusion_reshape = tf.reshape(spatial_temporal_concat,[-1, self.nFramesPerVid, 14, 14, 1024])   #[?, self.nFramesPerVid, 14, 14, 1024]
         
         fusion_conv6 = tf.layers.conv3d(fusion_reshape, filters=512, kernel_size=[3,3,3], strides=(1,1,1), padding='same', activation=tf.nn.relu) #[?,self.nFramesPerVid,14,14,512]
-        pool3d = tf.layers.max_pooling3d(fusion_conv6, pool_size=[self.nFramesPerVid,2,2], strides=(2,2,2), padding='valid') # [?,1,7,7,512]  ?=batchsize  3d max_pooling 与conv3d 可能有问题，目前先这样 有问题在调试
+        pool3d = tf.layers.max_pooling3d(fusion_conv6, pool_size=[self.nFramesPerVid,2,2], strides=(2,2,2), padding='valid') # [?,1,7,7,512]  ?=batchsize 
         pool3d_flat = tf.reshape(pool3d, [-1, 7*7*512])
         with tf.variable_scope('fc6_spatial'):
             fc6_W = tf.get_variable('W', [7*7*512, 4096], initializer=tf.contrib.layers.xavier_initializer(), trainable=True)
